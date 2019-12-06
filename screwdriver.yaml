@@ -2,6 +2,7 @@ version: 4
 
 annotations: 
     screwdriver.cd/prChain: fork
+    screwdriver.cd/buildCluster: gqq1
     
 shared:
     image: node:6
