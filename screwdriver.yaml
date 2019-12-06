@@ -1,5 +1,8 @@
 version: 4
 
+annotations: 
+    screwdriver.cd/prChain: fork
+    
 shared:
     image: node:6
 
