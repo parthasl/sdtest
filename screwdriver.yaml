@@ -1,7 +1,7 @@
 version: 4
 
 annotations: 
-    screwdriver.cd/prChain: fork
+    screwdriver.cd/prChain: 12
     screwdriver.cd/buildCluster: B
     
 shared:
