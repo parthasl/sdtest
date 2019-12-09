@@ -2,7 +2,6 @@ version: 4
 
 annotations: 
     screwdriver.cd/prChain: 12
-    screwdriver.cd/buildCluster: B
     
 shared:
     image: node:6
