@@ -15,3 +15,7 @@ jobs:
     requires: [~commit]
     steps:
       - build: echo "build"
+  component1:
+    requires: [~commit]
+    steps:
+      - build: echo "build"
