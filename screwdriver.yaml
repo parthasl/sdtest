@@ -2,9 +2,10 @@ version: 4
 
 annotations: 
     screwdriver.cd/prChain: 12
+    screwdriver.cd/buildCluster: bf1
     
 shared:
-    image: node:6
+    image: node:12
 
 jobs:
   pull-request:
