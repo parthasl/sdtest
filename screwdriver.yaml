@@ -1,8 +1,6 @@
 version: 4
 
 annotations: 
-    screwdriver.cd/prChain: 12
-    screwdriver.cd/buildCluster: bf1
     screwdriver.cd/executor: k8s
     
 shared:
