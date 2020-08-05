@@ -1,10 +1,5 @@
 version: 4
-
-annotations: 
-    screwdriver.cd/prChain: 12
-    screwdriver.cd/buildCluster: bf1
-    screwdriver.cd/executor: k8s
-    
+  
 shared:
     image: node:12
 
@@ -13,16 +8,16 @@ jobs:
     requires: [~pr]
     steps:
       - build: echo "skip build"
-  component:
+  component-default:
     steps:
       - build: echo "build"
-  component1:
+  component-gq1:
+    annotations: 
+      screwdriver.cd/buildCluster: gq1
     steps:
       - build: echo "build"
-  component2:
+  component-bf1:
+    annotations: 
+      screwdriver.cd/buildCluster: bf1
     steps:
-      - build: echo "build"
-  component3:
-    steps:
-      - build: echo "build"
-   
+      - build: echo "build"   
