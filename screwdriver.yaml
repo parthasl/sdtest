@@ -1,8 +1,5 @@
 version: 4
-
-annotations: 
-    screwdriver.cd/executor: k8s
-    
+   
 shared:
     image: node:12
 
