@@ -15,7 +15,7 @@ jobs:
     steps:
       - build: echo "build"
       - lscpu: lscpu
-      - meminfo: free -h
+      - meminfo: free -h -t
   component1:
     steps:
       - build: echo "build"
