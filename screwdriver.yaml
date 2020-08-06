@@ -4,7 +4,7 @@ shared:
   image: node:12
     
 annotations:
-  screwdriver.cd/ram: 5
+  screwdriver.cd/ram: 64
 
 jobs:
   pull-request:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - build: echo "build"
       - lscpu: lscpu
-      - meminfo: cat /proc/meminfo
+      - meminfo: free
   component1:
     steps:
       - build: echo "build"
