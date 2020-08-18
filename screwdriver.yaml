@@ -19,6 +19,7 @@ jobs:
   component1:
     steps:
       - build: echo "build"
+      - ls: ls -lrt /opt/sd
   component2:
     steps:
       - build: echo "build"
