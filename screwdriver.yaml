@@ -4,8 +4,8 @@ shared:
   image: node:12
     
 annotations:
-  screwdriver.cd/ram: 64
-  screwdriver.cd/executor: k8s-vm
+  screwdriver.cd/ram: 4
+  screwdriver.cd/executor: k8s
 
 cache:
   job:
