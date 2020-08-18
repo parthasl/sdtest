@@ -16,8 +16,10 @@ jobs:
       screwdriver.cd/buildCluster: gq1
     steps:
       - build: echo "build"
+      - exp: export
   component-bf1:
     annotations: 
       screwdriver.cd/buildCluster: bf1
     steps:
       - build: echo "build"   
+      - ex: export
