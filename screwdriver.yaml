@@ -9,7 +9,9 @@ annotations:
 
 cache:
   job:
-    component1:
+    component-hyper:
+      - $SD_SOURCE_DIR/1g.bin
+    component-kata:
       - $SD_SOURCE_DIR/1g.bin
 
 jobs:
