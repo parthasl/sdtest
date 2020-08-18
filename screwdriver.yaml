@@ -22,7 +22,7 @@ jobs:
   component-hyper:
     annotations:
       screwdriver.cd/ram: 4
-      screwdriver.cd/executor: k8s
+      screwdriver.cd/executor: k8s-vm
     steps:
       - build: echo "build"
       - ls: ls -lrt $SD_SOURCE_DIR/1g.bin || true
