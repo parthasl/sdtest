@@ -9,7 +9,7 @@ annotations:
 
 cache:
   job:
-    cachejob:
+    component1:
       - $SD_SOURCE_DIR/1g.bin
 
 jobs:
