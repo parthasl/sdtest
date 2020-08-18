@@ -3,6 +3,11 @@ version: 4
 shared:
     image: node:12
 
+cache:
+  job:
+    component-bf1:
+      - $SD_SOURCE_DIR/1g.bin
+
 jobs:
   pull-request:
     requires: [~pr]
@@ -22,4 +27,5 @@ jobs:
       screwdriver.cd/buildCluster: bf1
     steps:
       - build: echo "build"   
+      - dd: dd if=/dev/zero of=1g.bin bs=1G count=1 || true
       - ex: export
