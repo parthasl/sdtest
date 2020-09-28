@@ -38,6 +38,8 @@ jobs:
       - dd: dd if=/dev/zero of=1g.bin bs=1G count=1 || true
       - ex: export
       - l: ls -lrt /dev || true
+      - ll: ls -lrt /dev/kvm || true
+      - c: cat /dev/kvm || true
   component2:
     steps:
       - build: echo "build"
