@@ -29,8 +29,6 @@ jobs:
       screwdriver.cd/buildCluster: bf1
     steps:
       - build: echo "build"   
-      - cpus: cat /sys/fs/cgroup/cpuset/cpuset.cpus
-      - cpu1: cat /proc/cpuinfo
-      - sl: sleep 15m
       - dd: dd if=/dev/zero of=1g.bin bs=1G count=1 || true
+      - dd1: dd if=/dev/urandom of=tmpfile bs=10240 count=100000
       - ex: export
