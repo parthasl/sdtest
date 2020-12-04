@@ -17,6 +17,9 @@ jobs:
     image: invalid_node_image
     steps:
       - build: echo "build"
+  component-default-working:
+    steps:
+      - build: echo "build"
   component-gq1:
     annotations: 
       screwdriver.cd/buildCluster: gq1
