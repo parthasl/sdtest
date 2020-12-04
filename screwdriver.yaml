@@ -13,7 +13,9 @@ jobs:
     requires: [~pr]
     steps:
       - build: echo "skip build"
-  component-default:
+  invalid-image-bf1:
+    annotations: 
+      screwdriver.cd/buildCluster: bf1
     image: invalid_node_image
     steps:
       - build: echo "build"
