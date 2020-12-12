@@ -25,6 +25,7 @@ jobs:
       screwdriver.cd/ram: 20
     steps:
       - build: echo "build"
+      - sl: sleep 10m
   component-gq1:
     annotations: 
       screwdriver.cd/buildCluster: gq1
@@ -33,6 +34,7 @@ jobs:
     steps:
       - build: echo "build"
       - exp: export
+      - sl: sleep 10m
   component-bf1:
     image: centos:centos7
     annotations: 
