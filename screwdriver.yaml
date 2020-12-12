@@ -28,6 +28,8 @@ jobs:
   component-gq1:
     annotations: 
       screwdriver.cd/buildCluster: gq1
+      screwdriver.cd/cpu: 16
+      screwdriver.cd/ram: 20      
     steps:
       - build: echo "build"
       - exp: export
