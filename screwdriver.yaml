@@ -20,6 +20,9 @@ jobs:
     steps:
       - build: echo "build"
   component-default-working:
+    annotations: 
+      screwdriver.cd/cpu: 16
+      screwdriver.cd/ram: 20
     steps:
       - build: echo "build"
   component-gq1:
