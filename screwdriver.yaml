@@ -5,7 +5,8 @@ shared:
 
 jobs:
   component-beta:
-    requires: commit
+    requires: 
+      - ~commit
     steps:
       - build: echo "build"
       
