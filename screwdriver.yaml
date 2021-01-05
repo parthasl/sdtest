@@ -70,17 +70,17 @@ jobs:
 
               if [[ "${STATUS}" -eq "FAILURE" || "${STATUS}" -eq "ABORTED" ]]; then
                 echo "Build ${BUILD_ID} ${STATUS}"
-                exit 1
+                break
               fi
 
               if [[ "${STATUS}" -eq "RUNNING" || "${STATUS}" -eq "QUEUED" ]]; then
                 echo "Build ${BUILD_ID} ${STATUS}, wait 30s..."
-                if [[ "${attempts}" -ge 2 ]]; then
-                  echo "Build ${BUILD_ID} monitoring timed out"
-                  exit 1
-                fi                
                 sleep 2s
               fi
             done
+            if [[ "${STATUS}" -ne "SUCCESS" ]]; then
+              echo "Build ${BUILD_ID} monitoring timed out"
+              exit 1
+            fi                
       secrets:
         - ACCESS_TOKEN
