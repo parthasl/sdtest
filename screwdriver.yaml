@@ -8,5 +8,6 @@ jobs:
     requires: 
       - ~commit
     steps:
+      - slp: sleep 1m
       - build: echo "build"
       
