@@ -54,14 +54,16 @@ jobs:
       steps:
         - install_jq: yum install epel-release -y && yum update -y && yum install jq -y && jq -Version
         - trigger_beta_functiona_test: |
-            set -e
-            echo "${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN}"
-            TOKEN=$(curl -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq -r '.token')
-            JOB_ID=$(curl -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipelines/${PIPELINE_ID}/jobs | jq -r '.[0].id')
-            BUILD_ID=$(curl -m ${TIMEOUT} --fail -d "jobId=${JOB}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq -r '.id')
+            set +x
+            TOKEN=$(curl -s -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq -r '.token')
+            [[ -z "$TOKEN" ]] && echo "empty Token" && exit 1
+            JOB_ID=$(curl -s -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipelines/${PIPELINE_ID}/jobs | jq -r '.[0].id')
+            [[ -z "$JOB_ID" ]] && echo "empty Job Id" && exit 1
+            BUILD_ID=$(curl -s -m ${TIMEOUT} --fail -d "jobId=${JOB_ID}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq -r '.id')
+            [[ -z "$BUILD_ID" ]] && echo "empty Build Id" && exit 1            
             for attempts in {1..10}; do
               echo "Build ${BUILD_ID} started, polling for status ${STATUS} \n"
-              STATUS=$(curl -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq -r '.status')
+              STATUS=$(curl -s -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq -r '.status')
               if [[ "${STATUS}" -eq "SUCCESS" ]]; then 
                 break
               fi
