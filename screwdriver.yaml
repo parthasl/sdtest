@@ -60,20 +60,27 @@ jobs:
             [[ -z "$JOB_ID" ]] && echo "empty Job Id" && exit 1
             BUILD_ID=$(curl -s -m ${TIMEOUT} --fail -d "jobId=${JOB_ID}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq -r '.id')
             [[ -z "$BUILD_ID" ]] && echo "empty Build Id" && exit 1            
-            for attempts in {1..10}; do
-              echo "Build ${BUILD_ID} started, polling for status ${STATUS}"
+            for attempts in {1..2}; do
               STATUS=$(curl -s -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq -r '.status')
+              echo "Build ${BUILD_ID} started, polling status..."              
               if [[ "${STATUS}" -eq "SUCCESS" ]]; then 
+                echo "Build ${BUILD_ID} ${STATUS}"
                 break
               fi
 
               if [[ "${STATUS}" -eq "FAILURE" || "${STATUS}" -eq "ABORTED" ]]; then
+                echo "Build ${BUILD_ID} ${STATUS}"
                 exit 1
               fi
 
               if [[ "${STATUS}" -eq "RUNNING" || "${STATUS}" -eq "QUEUED" ]]; then
-                sleep 30s
+                echo "Build ${BUILD_ID} ${STATUS}, wait 30s..."
+                sleep 2s
               fi
             done
+            if [[ "${attempts}" -eq 10 ]]; then
+              echo "Build ${BUILD_ID} monitoring timed out"
+              exit 1
+            fi
       secrets:
         - ACCESS_TOKEN
