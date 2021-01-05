@@ -78,7 +78,7 @@ jobs:
                 sleep 2s
               fi
             done
-            if [[ "${attempts}" -eq 10 ]]; then
+            if [[ "${attempts}" -ge 2 ]]; then
               echo "Build ${BUILD_ID} monitoring timed out"
               exit 1
             fi
