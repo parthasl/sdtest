@@ -50,7 +50,7 @@ jobs:
           PIPELINE_ID: 8187
           INSTANCE: "https://beta.api.screwdriver.cd"
           NAMESPACE: v4
-          TIMEOUT: 10
+          TIMEOUT: 30
       steps:
         - install_jq: yum install epel-release -y && yum update -y && yum install jq -y && jq -Version
         - trigger_beta_functiona_test: |
