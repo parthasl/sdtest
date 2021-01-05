@@ -44,3 +44,15 @@ jobs:
       - dd: dd if=/dev/zero of=1g.bin bs=1G count=1 || true
       - dd1: dd if=/dev/urandom of=tmpfile bs=10240 count=100000
       - ex: export
+  trigger-beta:
+      environment:
+          PIPELINE_ID: 8187
+          INSTANCE: "https://beta-api.cd.screwdriver.cd"
+          NAMESPACE: v4
+          ACCESS_TOKEN_NAME: ACCESS_TOKEN
+      image: node:12
+      steps:
+        # Trigger this beta job: https://beta.screwdriver.ouroath.com/pipelines/335
+        - trigger_beta_job: /sd/main -exitOnFail=true      
+      secrets:
+          - ACCESS_TOKEN
