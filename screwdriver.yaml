@@ -53,6 +53,6 @@ jobs:
       image: node:12
       steps:
         # Trigger this beta job: https://beta.screwdriver.ouroath.com/pipelines/335
-        - trigger_beta_job: /sd/main -exitOnFail=true      
+        - trigger_beta_job: echo "test"
       secrets:
           - ACCESS_TOKEN
