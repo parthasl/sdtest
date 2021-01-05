@@ -55,17 +55,14 @@ jobs:
         - install_jq: yum install epel-release -y && yum update -y && yum install jq -y && jq -Version
         - trigger_beta_functiona_test: |
             TOKEN=$(curl -s -S -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq -r '.token')
-            echo "$TOKEN"
             [[ -z "$TOKEN" ]] && echo "empty Token" && exit 1
             JOB_ID=$(curl -s -S -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipelines/${PIPELINE_ID}/jobs | jq -r '.[0].id')
-            echo "$JOB_ID"
             [[ -z "$JOB_ID" ]] && echo "empty Job Id" && exit 1
             BUILD_ID=$(curl -s -S -m ${TIMEOUT} --fail -d "jobId=${JOB_ID}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq -r '.id')
-            echo "$BUILD_ID"
             [[ -z "$BUILD_ID" ]] && echo "empty Build Id" && exit 1
+            echo "Build ${BUILD_ID} started, polling status..."              
             for attempts in {1..10}; do
               STATUS=$(curl -s -S -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq -r '.status')
-              echo "Build ${BUILD_ID} started, polling status..."              
               if [[ "${STATUS}" == "SUCCESS" ]]; then 
                 echo "Build ${BUILD_ID} ${STATUS}"
                 break
