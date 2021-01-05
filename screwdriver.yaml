@@ -72,7 +72,6 @@ jobs:
               if [[ "${STATUS}" -eq "RUNNING" || "${STATUS}" -eq "QUEUED" ]]; then
                 sleep 30s
               fi
-           done
-
+            done
       secrets:
           - ACCESS_TOKEN
