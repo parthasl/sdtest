@@ -47,7 +47,7 @@ jobs:
   trigger-beta:
       image: centos:centos7
       environment:
-          PIPELINE_ID: 818
+          PIPELINE_ID: 8187
           INSTANCE: "https://beta.api.screwdriver.cd"
           NAMESPACE: v4
           TIMEOUT: 10
