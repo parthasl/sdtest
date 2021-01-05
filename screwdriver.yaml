@@ -51,7 +51,6 @@ jobs:
           NAMESPACE: v4
           ACCESS_TOKEN: ACCESS_TOKEN
           TIMEOUT: 10
-      image: busybox:latest
       steps:
         # Trigger this beta job: https://beta.screwdriver.ouroath.com/pipelines/335
         - trigger_beta_job: |
