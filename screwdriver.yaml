@@ -81,7 +81,7 @@ jobs:
                 sleep 2s
               fi
             done
-            if [ "${STATUS}" -ne "SUCCESS" ]; then
+            if [[ "${STATUS}" -ne "SUCCESS" ]]; then
               echo "Build ${BUILD_ID} monitoring timed out"
               exit 1
             fi                
