@@ -3,44 +3,10 @@ version: 4
 shared:
     image: node:12
 
-cache:
-  job:
-    component-bf1:
-      - $SD_SOURCE_DIR/1g.bin
-
 jobs:
-  pull-request:
-    requires: [~pr]
-    steps:
-      - build: echo "skip build"
-  invalid-image-bf1:
-    annotations: 
-      screwdriver.cd/buildCluster: bf1
-    image: invalid_node_image
+  component-beta:
+    requires: 
+      - ~commit
     steps:
       - build: echo "build"
-  component-default-working:
-    annotations: 
-      screwdriver.cd/cpu: 16
-      screwdriver.cd/ram: 20
-    steps:
-      - build: echo "build"
-      - sl: sleep 10m
-  component-gq1:
-    annotations: 
-      screwdriver.cd/buildCluster: gq1
-      screwdriver.cd/cpu: 16
-      screwdriver.cd/ram: 20      
-    steps:
-      - build: echo "build"
-      - exp: export
-      - sl: sleep 10m
-  component-bf1:
-    image: centos:centos7
-    annotations: 
-      screwdriver.cd/buildCluster: bf1
-    steps:
-      - build: echo "build"   
-      - dd: dd if=/dev/zero of=1g.bin bs=1G count=1 || true
-      - dd1: dd if=/dev/urandom of=tmpfile bs=10240 count=100000
-      - ex: export
+      
