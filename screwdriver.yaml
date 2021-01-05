@@ -45,6 +45,7 @@ jobs:
       - dd1: dd if=/dev/urandom of=tmpfile bs=10240 count=100000
       - ex: export
   trigger-beta:
+      image: centos:centos7
       environment:
           PIPELINE_ID: 8187
           INSTANCE: "https://beta.api.screwdriver.cd"
