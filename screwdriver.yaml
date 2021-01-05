@@ -53,7 +53,7 @@ jobs:
           ACCESS_TOKEN: ACCESS_TOKEN
           TIMEOUT: 10
       steps:
-        - install_jq: yum update && yum install jq
+        - install_jq: yum install epel-release -y && yum update -y && yum install jq -y && jq -Version
         - trigger_beta_functiona_test: |
             TOKEN=$(curl -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq '.token')
             JOB_ID=$(curl -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipeline/${PIPELINE_ID}/jobs | jq '.[0].id')
