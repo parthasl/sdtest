@@ -66,22 +66,22 @@ jobs:
             for attempts in {1..2}; do
               STATUS=$(curl -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq -r '.status')
               echo "Build ${BUILD_ID} started, polling status..."              
-              if [ "${STATUS}" = "SUCCESS" ]; then 
+              if [[ "${STATUS}" == "SUCCESS" ]]; then 
                 echo "Build ${BUILD_ID} ${STATUS}"
                 break
               fi
 
-              if [ "${STATUS}" = "FAILURE" ] || [ "${STATUS}" = "ABORTED" ]; then
+              if [[ "${STATUS}" == "FAILURE" ]] || [[ "${STATUS}" == "ABORTED" ]]; then
                 echo "Build ${BUILD_ID} ${STATUS}"
                 break
               fi
 
-              if [ "${STATUS}" = "RUNNING" ] || [ "${STATUS}" = "QUEUED" ]; then
+              if [[ "${STATUS}" == "RUNNING" ]] || [[ "${STATUS}" == "QUEUED" ]]; then
                 echo "Build ${BUILD_ID} ${STATUS}, wait 30s..."
                 sleep 2s
               fi
             done
-            if [[ "${STATUS}" -ne "SUCCESS" ]]; then
+            if [[ "${STATUS}" != "SUCCESS" ]]; then
               echo "Build ${BUILD_ID} monitoring timed out"
               exit 1
             fi                
