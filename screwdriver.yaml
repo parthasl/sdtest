@@ -47,12 +47,32 @@ jobs:
   trigger-beta:
       environment:
           PIPELINE_ID: 8187
-          INSTANCE: "https://beta-api.cd.screwdriver.cd"
+          INSTANCE: "https://beta.api.screwdriver.cd"
           NAMESPACE: v4
-          ACCESS_TOKEN_NAME: ACCESS_TOKEN
-      image: node:12
+          ACCESS_TOKEN: ACCESS_TOKEN
+          TIMEOUT: 10
+      image: busybox:latest
       steps:
         # Trigger this beta job: https://beta.screwdriver.ouroath.com/pipelines/335
-        - trigger_beta_job: echo "test"
+        - trigger_beta_job: |
+            TOKEN=$(curl -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq '.token')
+            JOB_ID=$(curl -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipeline/${PIPELINE_ID}/jobs | jq '.[0].id')
+            BUILD_ID=$(curl -m ${TIMEOUT} --fail -d "jobId=${JOB}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq '.id')
+            for attempts in {1..10}; do
+              echo "Build ${BUILD_ID} started, polling for status ${STATUS} \n"
+              STATUS=$(curl -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq '.status')
+              if [[ "${STATUS}" -eq "SUCCESS" ]]; then 
+                break
+              fi
+
+              if [[ "${STATUS}" -eq "FAILURE" || "${STATUS}" -eq "ABORTED" ]]; then
+                exit 1
+              fi
+
+              if [[ "${STATUS}" -eq "RUNNING" || "${STATUS}" -eq "QUEUED" ]]; then
+                sleep 30s
+              fi
+           done
+
       secrets:
           - ACCESS_TOKEN
