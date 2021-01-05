@@ -53,8 +53,8 @@ jobs:
           ACCESS_TOKEN: ACCESS_TOKEN
           TIMEOUT: 10
       steps:
-        # Trigger this beta job: https://beta.screwdriver.ouroath.com/pipelines/335
-        - trigger_beta_job: |
+        - install_jq: yum update && yum install jq
+        - trigger_beta_functiona_test: |
             TOKEN=$(curl -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq '.token')
             JOB_ID=$(curl -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipeline/${PIPELINE_ID}/jobs | jq '.[0].id')
             BUILD_ID=$(curl -m ${TIMEOUT} --fail -d "jobId=${JOB}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq '.id')
