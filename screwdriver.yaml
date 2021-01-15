@@ -23,6 +23,7 @@ jobs:
     annotations: 
       screwdriver.cd/buildCluster: bf1
     steps:
+      - ll: ls -lrt $SD_SOURCE_DIR/test || true
       - mkdir: mkdir -p $SD_SOURCE_DIR/test/test1
       - cat: echo test > $SD_SOURCE_DIR/test/test1test.txt
       - ln: ln -s $SD_SOURCE_DIR/test1 $SD_SOURCE_DIR/test/sdtestparthasl
