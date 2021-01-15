@@ -5,8 +5,8 @@ shared:
 
 cache:
   job:
-    component-bf1:
-      - $SD_SOURCE_DIR/1g.bin
+    symlink-test:
+      - $SD_SOURCE_DIR/test
 
 jobs:
   pull-request:
@@ -19,6 +19,15 @@ jobs:
     image: invalid_node_image
     steps:
       - build: echo "build"
+  symlink-test:
+    annotations: 
+      screwdriver.cd/buildCluster: bf1
+    steps:
+      - mkdir: mkdir -p $SD_SOURCE_DIR/test/test1
+      - cat: echo test > $SD_SOURCE_DIR/test/test1test.txt
+      - ln: ln -s $SD_SOURCE_DIR/test1 $SD_SOURCE_DIR/test/sdtestparthasl
+      - ls: ls -lrt $SD_SOURCE_DIR/test/sdtestparthasl
+      
   component-default-working:
     annotations: 
       screwdriver.cd/cpu: 16
