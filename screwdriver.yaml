@@ -23,6 +23,7 @@ jobs:
     steps:
       - build: echo "build"
   symlink-test:
+    image: centos:centos7
     annotations: 
       screwdriver.cd/buildCluster: bf1
     steps:
