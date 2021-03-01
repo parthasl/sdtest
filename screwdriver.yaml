@@ -1,100 +1,20 @@
-version: 4
-  
 shared:
-    image: node:12
-
-cache:
-  job:
-    symlink-test:
-      - $SD_SOURCE_DIR/test
+  image: node:12 
+  annotations:
+    screwdriver.cd/timeout: 1
 
 jobs:
-  pull-request:
-    requires: [~pr]
+  testabort:
+    image: node:12
     steps:
-      - build: echo "skip build"
-  print-image:
-    steps:
-      - printenv: export
-  invalid-image-bf1:
-    annotations: 
-      screwdriver.cd/buildCluster: bf1
-    image: invalid_node_image
-    steps:
-      - build: echo "build"
-  symlink-test:
-    image: centos:centos7
-    annotations: 
-      screwdriver.cd/buildCluster: bf1
-    steps:
-      - ll: ls -lrt $SD_SOURCE_DIR/test || true
-      - mkdir: mkdir -p $SD_SOURCE_DIR/test/test1
-      - cat: echo test > $SD_SOURCE_DIR/test/test1test.txt
-      - ln: ln -s $SD_SOURCE_DIR/test1 $SD_SOURCE_DIR/test/sdtestparthasl
-      - ls: ls -lrt $SD_SOURCE_DIR/test/sdtestparthasl
-      
-  component-default-working:
-    annotations: 
-      screwdriver.cd/cpu: 16
-      screwdriver.cd/ram: 20
-    steps:
-      - build: echo "build"
-      - sl: sleep 10m
-  component-gq1:
-    annotations: 
-      screwdriver.cd/buildCluster: gq1
-      screwdriver.cd/cpu: 16
-      screwdriver.cd/ram: 20      
-    steps:
-      - build: echo "build"
-      - exp: export
-      - sl: sleep 10m
-  component-bf1:
-    image: centos:centos7
-    annotations: 
-      screwdriver.cd/buildCluster: bf1
-    steps:
-      - build: echo "build"   
-      - dd: dd if=/dev/zero of=1g.bin bs=1G count=1 || true
-      - dd1: dd if=/dev/urandom of=tmpfile bs=10240 count=100000
-      - ex: export
-  trigger-beta:
-      image: centos:centos7
-      environment:
-          PIPELINE_ID: 8187
-          INSTANCE: "https://beta.api.screwdriver.cd"
-          NAMESPACE: v4
-          TIMEOUT: 30
-      steps:
-        - install_jq: yum install epel-release -y && yum update -y && yum install jq -y && jq -Version
-        - trigger_beta_functiona_test: |
-            TOKEN=$(curl -s -S -m ${TIMEOUT} --fail ${INSTANCE}/${NAMESPACE}/auth/token?api_token=${ACCESS_TOKEN} | jq -r '.token')
-            [[ -z "$TOKEN" ]] && echo "empty Token" && exit 1
-            JOB_ID=$(curl -s -S -m ${TIMEOUT} --fail -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/pipelines/${PIPELINE_ID}/jobs | jq -r '.[0].id')
-            [[ -z "$JOB_ID" ]] && echo "empty Job Id" && exit 1
-            BUILD_ID=$(curl -s -S -m ${TIMEOUT} --fail -d "jobId=${JOB_ID}" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${TOKEN}" -X POST ${INSTANCE}/${NAMESPACE}/builds | jq -r '.id')
-            [[ -z "$BUILD_ID" ]] && echo "empty Build Id" && exit 1
-            echo "Build ${BUILD_ID} started, polling status..."              
-            for attempts in {1..10}; do
-              STATUS=$(curl -s -S -m ${TIMEOUT} --fail -H "Authorization: Bearer ${TOKEN}" ${INSTANCE}/${NAMESPACE}/builds/${BUILD_ID} | jq -r '.status')
-              if [[ "${STATUS}" == "SUCCESS" ]]; then 
-                echo "Build ${BUILD_ID} ${STATUS}"
-                break
-              fi
-
-              if [[ "${STATUS}" == "FAILURE" ]] || [[ "${STATUS}" == "ABORTED" ]]; then
-                echo "Build ${BUILD_ID} ${STATUS}"
-                break
-              fi
-
-              if [[ "${STATUS}" == "RUNNING" ]] || [[ "${STATUS}" == "QUEUED" ]]; then
-                echo "Build ${BUILD_ID} ${STATUS}, wait 30s..."
-                sleep 30s
-              fi
-            done
-            if [[ "${STATUS}" != "SUCCESS" ]]; then
-              echo "Build ${BUILD_ID} monitoring timed out"
-              exit 1
-            fi                
-      secrets:
-        - ACCESS_TOKEN
+      - env: export FACTORY_BUILD_STATUS=success
+      - sleep: |
+          export ABORT_BUILD_STATUS=aborted
+      - teardown-first: |
+          sleep 60
+          export ABORT_BUILD_STATUS_TEARDOWN=aborted-teardown
+          export
+      - teardown-env: |
+          echo $FACTORY_BUILD_STATUS
+          echo $ABORT_BUILD_STATUS
+          echo $ABORT_BUILD_STATUS_TEARDOWN          
