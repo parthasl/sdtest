@@ -10,7 +10,6 @@ jobs:
       - env: export FACTORY_BUILD_STATUS=success
       - sleep: |
           export ABORT_BUILD_STATUS=aborted
-          1/0
           while true; do sleep 1; echo "sleep"; done          
       - teardown-first: |
           export ABORT_BUILD_STATUS_TEARDOWN=aborted-teardown
