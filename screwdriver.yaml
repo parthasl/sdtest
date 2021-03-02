@@ -13,7 +13,6 @@ jobs:
           1/0
           while true; do sleep 1; echo "sleep"; done          
       - teardown-first: |
-          sleep 60
           export ABORT_BUILD_STATUS_TEARDOWN=aborted-teardown
           export
       - teardown-env: |
