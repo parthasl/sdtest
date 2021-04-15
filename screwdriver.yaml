@@ -8,6 +8,7 @@ jobs:
     requires: 
       - ~commit
     steps:
-      - slp: sleep 2m
+      - slp: export ABORT_BUILD_STATUS=aborted; sleep 2m
       - build: echo "build"
+      - teardown-first: export
       
